@@ -38,15 +38,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.inMemoryAuthentication()
 		.withUser("admin")
-		.password("{noop}admin")
+		.password("admin")
 		.roles("ADMIN")
 		.and()
 		.withUser("user")
-		.password("{noop}password")
+		.password("password")
 		.roles("USER")
 		.and()
 		.withUser("scott")
-		.password("{noop}tiger")
+		.password("tiger")
 		.roles("CUSTOMER");
 	}
 
@@ -61,10 +61,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * 
 	 * return new InMemoryUserDetailsManager(admin, user); }
 	 * 
-	 * @Bean public PasswordEncoder passwordEncoder() { return
-	 * NoOpPasswordEncoder.getInstance(); }
 	 */
 	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return NoOpPasswordEncoder.getInstance();
+	}
 	
 
 }
