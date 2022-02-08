@@ -10,8 +10,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
@@ -42,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.roles("ADMIN")
 		.and()
 		.withUser("user")
-		.password("password")
+		.password("$2a$10$7clbI5RSuRwSJcTFoMAk3e73NTAja35Br0JkrfiDhr/fA/VWcYiqK")
 		.roles("USER")
 		.and()
 		.withUser("scott")
@@ -65,8 +68,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return NoOpPasswordEncoder.getInstance();
+		//return NoOpPasswordEncoder.getInstance();
+		return new BCryptPasswordEncoder();
 	}
+	
+	/*
+	 *Using LDAP Password Encoder
+	 *use encode method to encode password
+	 *
+	 * @Bean public PasswordEncoder passwordEncoder2() { return new
+	 * LdapShaPasswordEncoder(); }
+	 */
+	
+	
+	/*
+	 * Using SHA256 encryption
+	 * use encode method to encode password
+	 * 
+	 * @Bean public PasswordEncoder passwordEncoder3() { return new
+	 * StandardPasswordEncoder(); }
+	 */
 	
 
 }
