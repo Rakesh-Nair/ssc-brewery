@@ -24,6 +24,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return filter;
 	}
 	
+	public RestUrlAuthFilter restUrlAuthFilter(AuthenticationManager authenticationManager) {
+		RestUrlAuthFilter filter = new RestUrlAuthFilter(new AntPathRequestMatcher("/api/**"));
+		filter.setAuthenticationManager(authenticationManager);
+		return filter;
+	}
+	
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -31,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.addFilterBefore(restHeaderAuthFilter(authenticationManager()),
 				UsernamePasswordAuthenticationFilter.class)
 		.csrf().disable();
+		http.addFilterBefore(restUrlAuthFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
 		http
 		.authorizeRequests(authorize ->{
 			authorize.antMatchers("/","/webjars/**","/login","/resources/**").permitAll();

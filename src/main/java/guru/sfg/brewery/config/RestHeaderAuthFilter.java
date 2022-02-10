@@ -21,96 +21,21 @@ import org.springframework.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class RestHeaderAuthFilter extends AbstractAuthenticationProcessingFilter {
+public class RestHeaderAuthFilter extends AbstractAuthFilter {
 
 	protected RestHeaderAuthFilter(RequestMatcher requiresAuthenticationRequestMatcher) {
 		super(requiresAuthenticationRequestMatcher);
 	}
 
-	@Override
-	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-			throws AuthenticationException, IOException, ServletException {
-		
-		String username = getUsername(request);
-		if(username == null)
-			username = "";
-		String password = getPassword(request);
-		if(password == null)
-			password = "";
-		log.debug("Authenticating user "+username);
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username,password);
-		
-		if(!StringUtils.isEmpty(username)) {
-			return this.getAuthenticationManager().authenticate(token);
-		}
-		else {
-			return null;
-		}
-		
-		
-	}
-
-	private String getPassword(HttpServletRequest request) {
+	protected String getPassword(HttpServletRequest request) {
 		return request.getHeader("Api-Key");
 	}
 
-	private String getUsername(HttpServletRequest request) {
+	protected String getUsername(HttpServletRequest request) {
 		return request.getHeader("Api-Secret");
 	}
 	
-	@Override
-	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
-			throws IOException, ServletException {
 
-		HttpServletRequest request = (HttpServletRequest) req;
-		HttpServletResponse response = (HttpServletResponse) res;
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("Request is to process authentication");
-		}
-
-		try {
-			Authentication authResult = attemptAuthentication(request, response);
-			if(authResult != null) {
-				successfulAuthentication(request, response, chain, authResult);
-			}
-			else {
-				chain.doFilter(request, response);
-			}
-		}
-		catch(AuthenticationException e) {
-			unsuccessfulAuthentication(request, response, e);
-		}
-			
-		
-	}
 	
-	@Override
-	protected void unsuccessfulAuthentication(HttpServletRequest request,
-			HttpServletResponse response, AuthenticationException failed)
-			throws IOException, ServletException {
-		SecurityContextHolder.clearContext();
-
-		if (log.isDebugEnabled()) {
-			log.debug("Authentication request failed: " + failed.toString(), failed);
-			log.debug("Updated SecurityContextHolder to contain null Authentication");
-		}
-		
-		response.sendError(HttpStatus.UNAUTHORIZED.value(),
-				HttpStatus.UNAUTHORIZED.getReasonPhrase());
-	}
-
-	@Override
-	protected void successfulAuthentication(HttpServletRequest request,
-			HttpServletResponse response, FilterChain chain, Authentication authResult)
-			throws IOException, ServletException {
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("Authentication success. Updating SecurityContextHolder to contain: "
-					+ authResult);
-		}
-
-		SecurityContextHolder.getContext().setAuthentication(authResult);
-	}
-
+	
 }
