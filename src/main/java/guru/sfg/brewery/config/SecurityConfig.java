@@ -41,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.addFilterBefore(restUrlAuthFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
 		http
 		.authorizeRequests(authorize ->{
+			authorize.antMatchers("/h2-console/**").permitAll();
 			authorize.antMatchers("/","/webjars/**","/login","/resources/**").permitAll();
 			authorize.antMatchers("/beers/find","/beers*").permitAll();
 			authorize.antMatchers(HttpMethod.GET,"/api/v1/beer/**").permitAll();
@@ -51,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 		.formLogin().and()
 		.httpBasic();
+		http.headers().frameOptions().sameOrigin();
 	}
 
 	@Override
