@@ -55,22 +55,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.headers().frameOptions().sameOrigin();
 	}
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication()
-		.withUser("admin")
-		.password("{sha256}604375dae89ad7ba4d044c8060bff66c6092da2ebc13caeccc518e55cc4cd44a7d109eb7beaa11f3")
-		.roles("ADMIN")
-		.and()
-		.withUser("user")
-		.password("{bcrypt}$2a$10$7clbI5RSuRwSJcTFoMAk3e73NTAja35Br0JkrfiDhr/fA/VWcYiqK")
-		.roles("USER")
-		.and()
-		.withUser("scott")
-		.password("{bcrypt15}$2a$15$Tg23PBoFVmuCPC8B9EiTjejdQxZv8YowmFkrxbUN2XemAItycpfbC")
-		.roles("CUSTOMER");
-	}
-
+	/*
+	 * @Override protected void configure(AuthenticationManagerBuilder auth) throws
+	 * Exception { auth.inMemoryAuthentication() .withUser("admin") .password(
+	 * "{sha256}604375dae89ad7ba4d044c8060bff66c6092da2ebc13caeccc518e55cc4cd44a7d109eb7beaa11f3")
+	 * .roles("ADMIN") .and() .withUser("user") .password(
+	 * "{bcrypt}$2a$10$7clbI5RSuRwSJcTFoMAk3e73NTAja35Br0JkrfiDhr/fA/VWcYiqK")
+	 * .roles("USER") .and() .withUser("scott") .password(
+	 * "{bcrypt15}$2a$15$Tg23PBoFVmuCPC8B9EiTjejdQxZv8YowmFkrxbUN2XemAItycpfbC")
+	 * .roles("CUSTOMER"); }
+	 */
 	
 	/*
 	 * @Override
